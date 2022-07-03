@@ -14,8 +14,11 @@ token = 'insert_autorization_code_here'
 
 
 Script test drivers. Pick the one you need for testing.
+
 Heartbeat version seems to work now.
-PingPong version. Discord server always responds with op==9 after three pongs. 
+
+PingPong version:
+  Discord server always responds with op==9 after three pongs. 
   Restart of run_forever() doesn't kill ping thread, instead a new thread is started for every restart.
   Resume does not work either.
   Actually there is no documentation on a Ping feature in the Gateway documentation of the Discord development, see https://discord.com/developers/docs/topics/gateway.
