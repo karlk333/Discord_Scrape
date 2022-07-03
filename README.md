@@ -1,4 +1,4 @@
-# Discord_Scrape_test
+# Discord_Scrape_wsapp_test
 
 
 This is a script to test out WebSocketApp to work with Discord servers.
