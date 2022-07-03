@@ -23,6 +23,26 @@ class CDiscord_Scrape:
         return j
 
 
+    def on_data(self, wsapp, rec_data, opcode, contflag):
+        if opcode ==  websocket.ABNF.OPCODE_TEXT:
+            print(f"contflag: {contflag}")
+            self.event = json.loads(rec_data)
+
+            if "heartbeat_interval" in self.event['d']:
+                self.heartbeat_interval = self.event['d']['heartbeat_interval'] / 1000
+                print(f"heartbeat_interval received: {self.heartbeat_interval}s")
+
+            if "author" in self.event['d']:
+                guild_id  = self.event['d']['guild_id']
+                guildJSON = self.retrieve_guild(guild_id)
+                if guildJSON['name'] == 'karl_dev':         # karl_dev is my Disord test site
+                    print(f"{guildJSON['name']}.{self.event['d']['author']['username']}: {self.event['d']['content']}")
+
+                op_code = self.event['op']
+                if op_code == 11:
+                    print('Heartbeat received')
+
+
     def on_message(self, wsapp, message):
         self.event = json.loads(message)
 
@@ -49,7 +69,10 @@ class CDiscord_Scrape:
         print("Got a ping! A pong reply has already been automatically sent.")
 
     def on_pong(self, wsapp, message):
-        print("Got a pong! No need to respond")
+        self.pong_current_time_sec = time.time()
+        pong_delta_time_sec = self.pong_current_time_sec - self.pong_prev_time_sec
+        print(f"GMT: {time.asctime(time.gmtime())}  pong_delta_sec: {pong_delta_time_sec:.1f}s  Got a pong! No need to respond")
+        self.pong_prev_time_sec = self.pong_current_time_sec
 
     def on_open(self, wsapp):
         self.heartbeat_interval = 40    # Initial hearbeat_interval, will be overwritten/assigned in on_message() once ['d']['hearbeat_interval'] is received
@@ -104,13 +127,16 @@ class CDiscord_Scrape:
         self.HeartbeatEnable = HeartbeatEnable
         self.PingPongEnable = PingPongEnable
 
+        self.pong_prev_time_sec = time.time()
+
         websocket.enableTrace(False)
         
         wsapp = websocket.WebSocketApp('wss://gateway.discord.gg/?v=9&encoding=json',
-                                        on_message=self.on_message, 
                                         on_error=self.on_error, 
                                         on_close=self.on_close)
         
+        #wsapp.on_message=self.on_message
+        wsapp.on_data=self.on_data
         wsapp.on_open = self.on_open
         if PingPongEnable:
             wsapp.on_ping = self.on_ping
@@ -130,10 +156,11 @@ dc = CDiscord_Scrape()
 # If you don't assign any token, you can anyway test the heartbeat / ping/pong protocol wihtout it as shown in the script test drivers below
 #token = 'insert_autorization_code_here_and_remove_#' 
 
+
 # Script test drivers. Pick the one you need for testing.
 # Heartbeat version still throws back warning message: argument of type 'NoneType' is not iterable
-# PingPong version works without any warning messages.
+# PingPong version throws back warning message: argument of type 'bool' is not iterable
 #dc.Run(token, PingPongEnable=False, HeartbeatEnable=True)
 #dc.Run(PingPongEnable=False, HeartbeatEnable=True)
-#dc.Run(token, PingPongEnable=True, HeartbeatEnable=False)
-dc.Run(PingPongEnable=True, HeartbeatEnable=False)
+dc.Run(token, PingPongEnable=True, HeartbeatEnable=False)
+#dc.Run(PingPongEnable=True, HeartbeatEnable=False)
