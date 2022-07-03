@@ -1,0 +1,25 @@
+contflag: True
+heartbeat_interval received: 41.25s
+contflag: True
+contflag: True
+contflag: True
+contflag: True
+karl_dev.karl: discord message entered 1
+contflag: True
+contflag: True
+contflag: True
+karl_dev.karl: discord message entered 2
+GMT: Sun Jul  3 08:35:20 2022  pong_delta_sec: 41.5s  Got a pong! No need to respond
+contflag: True
+karl_dev.karl: discord message entered 3
+contflag: True
+GMT: Sun Jul  3 08:36:01 2022  pong_delta_sec: 41.3s  Got a pong! No need to respond
+contflag: True
+contflag: True
+karl_dev.karl: discord message entered 4
+GMT: Sun Jul  3 08:36:42 2022  pong_delta_sec: 41.3s  Got a pong! No need to respond
+contflag: True
+argument of type 'bool' is not iterable
+GMT: Sun Jul  3 08:37:24 2022  pong_delta_sec: 41.3s  Got a pong! No need to respond
+GMT: Sun Jul  3 08:38:05 2022  pong_delta_sec: 41.3s  Got a pong! No need to respond
+GMT: Sun Jul  3 08:38:46 2022  pong_delta_sec: 41.2s  Got a pong! No need to respond
